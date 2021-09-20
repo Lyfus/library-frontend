@@ -1,0 +1,20 @@
+<div class="card_container">
+    <h2 mat-dialog-title>Livres disponibles de la librairie</h2>
+    <mat-card *ngFor="let book of bookList" class="card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>{{ book.name }}</mat-card-title>
+          <mat-card-subtitle>{{ book.author.firstName + " " + book.author.lastName}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="{{ book.coverLink }}">
+        <mat-card-content>
+          <span><b>Résumé : </b></span>
+          <p>
+            {{ book.resume }}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="borrowBook(book)" *ngIf="data.connectedUser">Emprunter</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

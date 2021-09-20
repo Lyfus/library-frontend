@@ -1,0 +1,75 @@
+<mat-drawer-container class="example-container" autosize>
+
+    <mat-drawer #sidenav class="example-sidenav" mode="side" (mouseover)="changeDialogMessage()" >
+        <ng-container *ngIf="!connectedUser">
+            <div class="drawer-title">Connexion</div>
+            <form [formGroup]="loginForm" (ngSubmit)="loginSubmit()">
+                <mat-form-field appearance="fill">
+                    <mat-label>Identifiant</mat-label>
+                    <input matInput placeholder="Login" formControlName="login" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Mot de passe</mat-label>
+                    <input matInput placeholder="Password" type="password" formControlName="password" required>
+                </mat-form-field>
+                <mat-error *ngIf="loginError">Ce n'est pas les bons identifiants</mat-error>
+                <div>
+                    <button 
+                        mat-stroked-button
+                        type="submit" 
+                        [disabled]="!loginForm.valid"
+                        class="login_button"
+                    >Se connecter
+                    </button>
+                </div>
+            </form>
+        </ng-container>
+    </mat-drawer>
+
+    <div id="main-container">
+        <div id="upper-content">      
+            <div class="sidenav-content">
+                <button type="button" mat-button (click)="sidenav.toggle()" *ngIf="!connectedUser">
+                    <mat-icon aria-hidden="false" aria-label="account_icon">account_circle</mat-icon>
+                </button>
+                <button type="button" mat-button (click)="disconnect()" *ngIf="connectedUser">
+                    <mat-icon aria-hidden="false" aria-label="disconnect">login</mat-icon>
+                </button>
+                <div class="user_def" *ngIf="connectedUser"><b>{{ connectedUser.firstName + " " + connectedUser.lastName }}</b></div>
+            </div>
+        </div>
+        <div id="main-content">
+            <div id="librarian">
+                <div class="dialog_content">
+                    <div class="dialog_center_content">
+                        <div class="dialog_text">{{ actualDialog }}</div>
+                        <img class="dialog" src="../../assets/conversation.png" />
+                    </div>
+                </div>
+                <img class="librarian_illus" src="../../assets/librarian.png" />
+            </div>
+        </div>
+        <div id="library_menu">
+            <button mat-raised-button color="primary" (click)="openBooksDialog()">Consulter les livres disponibles</button>
+        </div>
+        <div id="upper-content">
+            <div id="books_user_list"  *ngIf="connectedUser && (userBooks && userBooks.length > 0)">
+                <div class="card_container">
+                    <h2>Mes livres empruntés : </h2>
+                    <mat-card *ngFor="let book of userBooks" class="card">
+                        <mat-card-header>
+                        <div mat-card-avatar class="example-header-image"></div>
+                        <mat-card-title>{{ book.name }}</mat-card-title>
+                        <mat-card-subtitle>{{ book.author.firstName + " " + book.author.lastName}}</mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-actions>
+                            <button mat-raised-button color="primary" (click)="giveBackBook(book)">Rendre</button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  </mat-drawer-container>
